@@ -38,9 +38,9 @@ registreer({
 		f: voegbyHoop,
 		hulp: 'voegbyHoop(h, el): voeg el by hoop h'
 	},
-	haalMinUit: {
-		f: haalMinUit,
-		hulp: 'haalMinUit(h): haal die minimum uit en herstel hoop h'
+	haalKopAf: {
+		f: haalKopAf,
+		hulp: 'haalKopAf(h): haal die boonste element uit en herstel hoop h'
 	},
 	rHoopBo: {
 		f: rHoopBo,
@@ -53,9 +53,43 @@ registreer({
 	rGroei: {
 		f: rGroei,
 		hulp: 'rGroei(n): begin by lee rooster en groei met een element tot by n' 
+	},
+	i: {
+		f: iElement,
+		hulp: 'i(r, i): kry die i-grootste element van rooster r'
+	},
+	iGroterAs: {
+		f: iGroterAs,
+		hulp: 'iGroterAs(r, i, x): is i-grootste element groter as x?'
 	}
 })
 return
+
+function iGroterAs(r, indeks, x) {
+	var h = hoop(r)
+	return telHoeveelGroterAs(indeks + 1, 0) > indeks
+	function telHoeveelGroterAs(stopTelling, i) {
+		if (i >= h.length || h[i] <= x)
+			return 0
+		var telling = 1
+		if (telling >= stopTelling)
+			return telling
+		telling += telHoeveelGroterAs(stopTelling - telling, linkerKind(i))
+		if (telling >= stopTelling)
+			return telling
+		telling += telHoeveelGroterAs(stopTelling - telling, regterKind(i))
+		return telling
+	}
+}
+
+function iElement(r, indeks) {
+	var h = hoop(r)
+	, i
+	
+	for (i = 0; i < indeks; ++i)
+		haalKopAf(h)
+	return haalKopAf(h)
+}
 
 function rHoopBo(n) {
 	rHoop(n, hoop)
@@ -179,7 +213,7 @@ function ruilAsGroterAsOuer(h, i) {
 	}
 }
 
-function haalMinUit(h) {
+function haalKopAf(h) {
 	var min = h[0]
 	h[0] = h.pop()
 	ruilAsKleinerAsKinders(h, 0)
