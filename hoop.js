@@ -4,6 +4,10 @@ registreer({
 		f: hoop,
 		hulp: 'hoop(r): verander rooster r in hoop'
 	},
+	hoopVanOnder: {
+		f: hoop,
+		hulp: 'hoopVanOnder(r): verander rooster r in hoop deur onder te begin'
+	},
 	wys: {
 		f: wys,
 		hulp: 'wys(h): druk die hoop h uit in vlakke'
@@ -37,9 +41,63 @@ registreer({
 	haalMinUit: {
 		f: haalMinUit,
 		hulp: 'haalMinUit(h): haal die minimum uit en herstel hoop h'
+	},
+	rHoopBo: {
+		f: rHoopBo,
+		hulp: 'rHoopBo(n): bou reeks van hope tot by grootte n van bo af'
+	},
+	rHoopOnder: {
+		f: rHoopOnder,
+		hulp: 'rHoopOnder(n): bou reeks van hope tot by grootte n van onder af'
+	},
+	rGroei: {
+		f: rGroei,
+		hulp: 'rGroei(n): begin by lee rooster en groei met een element tot by n' 
 	}
 })
 return
+
+function rHoopBo(n) {
+	rHoop(n, hoop)
+}
+
+function rHoopOnder(n) {
+	rHoop(n, hoopVanOnder)
+}
+
+function rHoop(n, f) {
+	var r = []
+	, i
+	, h
+	, t = (new Date()).getTime()
+	, t1
+
+	for (i = 0; i < n; ++i) {
+		groei(r)
+		h = f(r)
+		if (i % 1000 === 0) {
+			t1 = (new Date()).getTime()
+			console.log('[' + i + '] ' + (t1 - t))
+			t = t1
+		}
+	}
+}
+
+function rGroei(n) {
+	var r = []
+	, i
+	, t = (new Date()).getTime()
+	, t1
+
+	for (i = 0; i < n; ++i) {
+		groei(r)
+		if (i % 1000 === 0) {
+			t1 = (new Date()).getTime()
+			console.log('[' + i + '] ' + (t1 - t))
+			t = t1
+		}
+	}
+}
 
 function registreer(funksies) {
 	console.log('')
@@ -47,6 +105,11 @@ function registreer(funksies) {
 		repl.context[funksieNaam] = funksies[funksieNaam].f
 		console.log(funksies[funksieNaam].hulp)
 	})
+}
+
+function groei(r) {
+	r = r || []
+	r.push(Math.round(Math.random()*(r.length+1)))
 }
 
 function bou(n) {
@@ -77,6 +140,19 @@ function wys(h) {
 			lyn += h[i] + ' '
 		console.log(lyn)
 	}
+}
+
+function hoopVanOnder(elemente) {
+	var h = []
+	, i
+
+	elemente.forEach(function (el) {
+		h.push(el)
+	})
+	for (i = h.length - 1; i >= 0; --i) {
+		ruilAsKleinerAsKinders(h, i)
+	}
+	return h
 }
 
 function hoop(elemente) {
